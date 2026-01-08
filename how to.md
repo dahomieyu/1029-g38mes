@@ -1,4 +1,4 @@
-so baisically do ctrl f and then search up whatever game you want if it redirects to code, download it.
+if your on the stash.html do ctrl f and then search up whatever game you want, if it redirects to code, download it. and all the gaes have "cl" before it idk why.
 
 
-  GOOD BOY! enyoy the game tho
+ ! enyoy the game
