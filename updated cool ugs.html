@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UGS Files — Indigo Ultraviolet</title>
+
+  <!-- Optional: a clean sans font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-1: #0b0726;            /* deep indigo */
+      --bg-2: #2b0f4a;            /* dark ultraviolet */
+      --glass: rgba(255,255,255,0.04);
+      --panel: rgba(255,255,255,0.03);
+      --accent: #7c4dff;          /* ultraviolet neon */
+      --accent-2: #4dd0e1;        /* cyan highlight */
+      --muted: rgba(255,255,255,0.65);
+      --soft-white: rgba(255,255,255,0.95);
+      --glow: 0 8px 30px rgba(124,77,255,0.18);
+      --glass-border: rgba(255,255,255,0.06);
+      --radius: 12px;
+    }
+
+    /* Reset & layout */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,77,255,0.12), transparent 8%),
+                  radial-gradient(900px 500px at 90% 90%, rgba(77,208,225,0.06), transparent 10%),
+                  linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      color:var(--soft-white);
+      display:flex;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:fixed;
+      left:0;
+      top:0;
+      width:88px;
+      height:100vh;
+      padding:18px 10px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-right: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px) saturate(120%);
+      box-shadow: 2px 0 30px rgba(0,0,0,0.6);
+      z-index:1000;
+    }
+
+    .sidebar .logo{
+      width:48px;
+      height:48px;
+      border-radius:10px;
+      background: linear-gradient(135deg, rgba(124,77,255,0.18), rgba(77,208,225,0.08));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--soft-white);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:0.6px;
+      box-shadow: var(--glow);
+      border: 1px solid rgba(124,77,255,0.12);
+    }
+
+    .sidebar-btn{
+      width:100%;
+      min-height:48px;
+      border-radius:10px;
+      border:none;
+      background: linear-gradient(180deg, rgba(124,77,255,0.14), rgba(124,77,255,0.06));
+      color:var(--soft-white);
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      box-shadow: 0 6px 18px rgba(11,7,38,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+      padding:10px;
+      text-align:center;
+    }
+
+    .sidebar-btn:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 14px 40px rgba(124,77,255,0.18);
+      background: linear-gradient(180deg, rgba(124,77,255,0.28), rgba(77,208,225,0.06));
+    }
+
+    .sidebar-btn.empty{
+      opacity:0.45;
+      cursor:default;
+      transform:none;
+      box-shadow:none;
+      background:transparent;
+      border:1px dashed rgba(255,255,255,0.03);
+    }
+
+    /* Custom scrollbar for sidebar */
+    .sidebar::-webkit-scrollbar{width:8px}
+    .sidebar::-webkit-scrollbar-track{background:transparent}
+    .sidebar::-webkit-scrollbar-thumb{
+      background: linear-gradient(180deg, rgba(124,77,255,0.28), rgba(77,208,225,0.18));
+      border-radius:8px;
+      border:2px solid transparent;
+      background-clip:padding-box;
+    }
+
+    /* Main content */
+    .main-content{
+      margin-left:110px;
+      padding:36px 28px;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      max-width:1200px;
+      margin:0 auto;
+      width:100%;
+    }
+
+    h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:0.6px;
+      color:var(--soft-white);
+      text-shadow: 0 6px 30px rgba(11,7,38,0.6);
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .subtitle{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:500;
+      text-align:center;
+      margin-top:6px;
+    }
+
+    /* Search & controls */
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-left:auto;
+    }
+
+    .search-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:8px;
+      border-radius:12px;
+      border:1px solid var(--glass-border);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+    }
+
+    #searchInput{
+      background:transparent;
+      border:none;
+      outline:none;
+      color:var(--soft-white);
+      padding:10px 12px;
+      width:320px;
+      max-width:40vw;
+      font-size:14px;
+    }
+
+    #searchInput::placeholder{color:rgba(255,255,255,0.35)}
+
+    .load-btn{
+      background: linear-gradient(90deg, var(--accent), #5ad1ff);
+      color:#0b0726;
+      border:none;
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 10px 30px rgba(124,77,255,0.18);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .load-btn:hover{transform:translateY(-3px); box-shadow: 0 18px 50px rgba(124,77,255,0.22)}
+
+    /* Sections */
+    #sections-container{
+      max-width:1100px;
+      margin:0 auto;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:22px;
+    }
+
+    .letter-section{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding:20px;
+      border:1px solid var(--glass-border);
+      box-shadow: 0 8px 30px rgba(2,2,10,0.6);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .letter-section:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(11,7,38,0.6);
+    }
+
+    .letter-header{
+      font-size:20px;
+      margin:0 0 12px 0;
+      color:var(--soft-white);
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .letter-header .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background: linear-gradient(180deg, var(--accent), #a78bff);
+      box-shadow: 0 6px 18px rgba(124,77,255,0.18);
+    }
+
+    .empty-message{
+      color:var(--muted);
+      font-style:italic;
+      padding:12px 0;
+    }
+
+    /* File buttons */
+    input[type="button"].file-btn{
+      background: linear-gradient(90deg, rgba(124,77,255,0.14), rgba(77,208,225,0.04));
+      border:1px solid rgba(124,77,255,0.12);
+      color:var(--soft-white);
+      padding:14px 18px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+      width:100%;
+      text-align:left;
+      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+      box-shadow: 0 8px 30px rgba(11,7,38,0.45);
+    }
+
+    input[type="button"].file-btn:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 18px 50px rgba(124,77,255,0.18);
+      background: linear-gradient(90deg, rgba(124,77,255,0.26), rgba(77,208,225,0.08));
+    }
+
+    input[type="button"].file-btn:active{transform:translateY(0); box-shadow: 0 6px 18px rgba(11,7,38,0.45)}
+
+    a.link{
+      color:var(--accent-2);
+      text-decoration:none;
+      font-weight:600;
+      transition: color .12s ease, text-shadow .12s ease;
+    }
+
+    a.link:hover{color:#9befff; text-shadow: 0 6px 30px rgba(77,208,225,0.08)}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .main-content{padding:20px}
+      #searchInput{width:200px; max-width:40vw}
+      .sidebar{width:72px}
+      .main-content{margin-left:86px}
+    }
+
+    @media (max-width:600px){
+      .sidebar{display:none}
+      .main-content{margin-left:20px; padding:18px}
+      #searchInput{width:140px}
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="logo" title="UGS">UGS</div>
+    <!-- Example buttons — you can populate these dynamically -->
+    <button class="sidebar-btn">A</button>
+    <button class="sidebar-btn">B</button>
+    <button class="sidebar-btn empty" aria-hidden="true">+</button>
+    <button class="sidebar-btn">C</button>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <div>
+        <h1>UGS Files- was made by chris</h1>
+        <div class="subtitle">Files from the Ultimate Game Stash —prolly looks cool lil boi</div>
+      </div>
+
+      <div class="controls" role="region" aria-label="Search and actions">
+        <div class="search-wrap" title="Search files">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="opacity:.9">
+            <path d="M21 21l-4.35-4.35" stroke="url(#g1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#7c4dff"/>
+                <stop offset="1" stop-color="#4dd0e1"/>
+              </linearGradient>
+            </defs>
+            <circle cx="11" cy="11" r="6" stroke="url(#g1)" stroke-width="1.6" fill="transparent"/>
+          </svg>
+          <input id="searchInput" type="text" placeholder="Search..." aria-label="Search files">
+        </div>
+
+        <button class="load-btn" id="lolbutton" onclick="const script = document.createElement('script'); script.src='https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@latest/codeorn.js'; document.body.appendChild(script);">
+          Load Scripts
+        </button>
+      </div>
+    </header>
+
+    <div id="sections-container">
+      <section class="letter-section">
+        <div class="letter-header">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Featured Files</span>
+        </div>
+
+        <div class="buttons-container" style="display:flex;flex-direction:column;gap:12px;">
+          <input class="file-btn" type="button" value="UGS Master List — Google Doc" onclick="window.open('https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/','_blank')">
+          <input class="file-btn" type="button" value="Discord Invite — Join Server" onclick="window.open('https://discord.gg/rmVsAqkpkA','_blank')">
+        </div>
+      </section>
+
+      <section class="letter-section">
+        <div class="letter-header">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Search & Tools</span>
+        </div>
+
+        <div class="empty-message">
+          Use the search box above to filter files. Click "Load Scripts" if external tools fail to load automatically.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Keep your external scripts as before -->
+  <script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/searchbut.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@latest/codeorn.js"></script>
+</body>
+</html>
